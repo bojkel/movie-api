@@ -168,7 +168,6 @@ exports.addToFavourites = (req, res) => {
             User_ID: doc.user_id,
             Movie_URL: doc.movie_url
         }
-
         res.status(201).json(responseService.postMessage('favourite', result));
     })
     .catch(err=>{
