@@ -10,8 +10,6 @@ router.get('/username/:username', userController.getByUsername)
 
 router.get('/:username/favourites',userController.getFavourites)
 
-router.post('/:username/favourites', userController.addToFavourites);
-
 router.delete('/:username', userController.delete)
 
 module.exports = router

@@ -20,15 +20,12 @@ exports.getAll = (req,res) => {
                         ID: user._id,
                         Username: user.username,
                         Name: user.name,
-                        Password: user.password,
-                        Favourite_Movies: user.fav_movies,
-                        Favourite_Series: user.fav_series
+                        Password: user.password
                     }
                 })
             }
             res.status(200).json(responseService.getAllMessage('user', result))
         }
-        
     }).catch(err=>{
         if(err){
             res.status(404).json(responseService.getErrorMessage('user', true, err))
@@ -146,39 +143,6 @@ exports.getFavourites = (req,res) => {
     }).catch(err=>{
         if(err){
             return res.status(404).json(responseService.getErrorMessage('favourite', true, err))
-        }
-    })
-}
-
-exports.addToFavourites = (req, res) => {
-
-    User.find({username: req.params.username})
-    .then(user=>{
-        if(user.length<1){
-            return res.status(404).json(responseService.noDataMessage('user'))
-        }
-        else{
-            var favourite = new Favourites({
-                _id: new mongoose.Types.ObjectId,
-                user_id: user[0]._id,
-                movie_url: req.body.movie_url
-            })
-        
-            return favourite
-            .save()
-            .then(doc=>{
-                const result = {
-                    ID: doc._id,
-                    User_ID: doc.user_id,
-                    Movie_URL: doc.movie_url
-                }
-                res.status(201).json(responseService.postMessage('favourite', result));
-            })
-            .catch(err=>{
-                if(err){
-                    res.status(500).json(responseService.postErrorMessage('favourite', err));
-                }
-            })
         }
     })
 }

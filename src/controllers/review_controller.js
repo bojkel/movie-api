@@ -5,7 +5,7 @@ const { default: mongoose } = require('mongoose');
 
 exports.getAll = (req,res) => {
     Review.find()
-    .select('_id user_id movie_url review')
+    .select('_id user_id series_id message rating')
     .exec()
     .then(docs => {
         if(docs.length === 0 ) {
@@ -18,8 +18,9 @@ exports.getAll = (req,res) => {
                     return {
                         ID: review._id,
                         User_ID: review._id,
-                        Movie_URL: review.movie_url,
-                        Review: review.review
+                        Serie_ID: review.serie_id,
+                        Message: review.message,
+                        Rating: review.rating
                     }
                 })
             }
@@ -33,23 +34,27 @@ exports.getAll = (req,res) => {
     })
 }
 
-exports.getById = (req,res) => {
+exports.getReviewsForSeries = (req,res) => {
 
-    Review.findById(req.params.id)
+    Review.find({serie_id: req.body.id})
     .exec()
-    .then(review=>{
-        if(review.length === 0){
+    .then(reviews=>{
+        if(reviews.length === 0){
             return res.status(404).json(responseService.noDataMessage('review'))
         }
-
         else{
-            const fetchedReview= {
-                ID: review._id,
-                User_ID: review._id,
-                Movie_URL: review.movie_url,
-                Review: review.review
+            const fetchedReviews = {
+                Reviews: reviews.map(review=>{
+                    return{
+                        ID: review._id,
+                        User_ID: review._id,
+                        Serie_ID: review.serie_id,
+                        Message: review.message,
+                        Rating: review.rating
+                    }
+                })
             }
-            return res.status(200).json(responseService.getByProperty('review', 'id', fetchedReview))
+            return res.status(200).json(responseService.getByProperty('review', 'id', fetchedReviews))
         }
     }).catch(err=>{
         if(err){
@@ -63,8 +68,9 @@ exports.createReview = (req, res) => {
     var review = new Review({
         _id: new mongoose.Types.ObjectId,
         user_id: req.body.user_id,
-        movie_url: req.body.movie_url,
-        review: req.body.review
+        serie_id: req.params.id,
+        message: req.body.message,
+        rating: req.body.rating
     })
 
     return review
@@ -72,11 +78,11 @@ exports.createReview = (req, res) => {
     .then(doc=>{
         const result = {
             ID: doc._id,
-            User_ID: doc._id,
-            Movie_URL: doc.movie_url,
-            Review: doc.review
+            User_ID: doc.user_id,
+            Serie_ID: doc.serie_id,
+            Message: doc.message,
+            Rating: doc.rating
         }
-
         res.status(201).json(responseService.postMessage('review', result));
     })
     .catch(err=>{
@@ -87,14 +93,12 @@ exports.createReview = (req, res) => {
 }
 
 exports.delete = (req,res) => {
-    Review.findOneAndDelete({_id: req.params.id})
+    Review.findOneAndDelete({_id: req.params.review_id})
     .exec()
     .then(deletedReview=>{
-
         if(deletedReview.length === 0){
             return res.status(404).json(responseService.doesntExistMessage('review'))
         }
-
         else{
             return res.status(200).json(responseService.deleteByPropertyMessage('review', 'id', deletedReview))
         }
