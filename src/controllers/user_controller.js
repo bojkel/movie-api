@@ -111,7 +111,7 @@ exports.delete = (req,res) => {
 }
 
 exports.getFavourites = (req,res) => {
-    User.find(req.params.username)
+    User.find({username: req.params.username})
     .exec()
     .then(user=>{
         if(user.length < 1){
@@ -121,14 +121,12 @@ exports.getFavourites = (req,res) => {
         }
 
         else{
-            Favourites.find({username: req.params.username})
+            Favourites.find({user_id: user[0]._id})
             .select('_id user_id movie_url')
             .exec()
             .then(favourites =>{
                 if(favourites.length === 0 ){
-                    res.status(500).json({
-                        Message: 'User has no favourites yet'
-                    })
+                    res.status(500).json(responseService.noDataMessage('favourites'))
                 }
                 else{
                     const result = {
@@ -154,25 +152,33 @@ exports.getFavourites = (req,res) => {
 
 exports.addToFavourites = (req, res) => {
 
-    var favourite = new Favourites({
-        _id: new mongoose.Types.ObjectId,
-        user_id: req.body.user_id,
-        movie_url: req.body.movie_url
-    })
-
-    return favourite
-    .save()
-    .then(doc=>{
-        const result = {
-            ID: doc._id,
-            User_ID: doc.user_id,
-            Movie_URL: doc.movie_url
+    User.find({username: req.params.username})
+    .then(user=>{
+        if(user.length<1){
+            return res.status(404).json(responseService.noDataMessage('user'))
         }
-        res.status(201).json(responseService.postMessage('favourite', result));
-    })
-    .catch(err=>{
-        if(err){
-            res.status(500).json(responseService.postErrorMessage('favourite', err));
+        else{
+            var favourite = new Favourites({
+                _id: new mongoose.Types.ObjectId,
+                user_id: user[0]._id,
+                movie_url: req.body.movie_url
+            })
+        
+            return favourite
+            .save()
+            .then(doc=>{
+                const result = {
+                    ID: doc._id,
+                    User_ID: doc.user_id,
+                    Movie_URL: doc.movie_url
+                }
+                res.status(201).json(responseService.postMessage('favourite', result));
+            })
+            .catch(err=>{
+                if(err){
+                    res.status(500).json(responseService.postErrorMessage('favourite', err));
+                }
+            })
         }
     })
 }

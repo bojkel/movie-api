@@ -3,7 +3,7 @@ const headerService = require('./header_service');
 const middlewareService = require('./middleware_service');
 const db = require('../db/db_config');
 
-exports.setServer = (app, port) => {
+exports.startServer = (app, port) => {
     headerService.setHeaders(app);
     middlewareService.setMiddleware(app);
     routes.setRoutes(app);
