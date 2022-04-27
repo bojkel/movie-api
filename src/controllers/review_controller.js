@@ -91,7 +91,7 @@ exports.createReview = (req, res) => {
 }
 
 exports.delete = (req,res) => {
-    Review.findOneAndDelete({_id: req.params.review_id})
+    Review.findByIdAndDelete({_id: req.params.id})
     .exec()
     .then(deletedReview=>{
         if(deletedReview.length === 0){

@@ -1,4 +1,3 @@
-
 const mongoose = require('mongoose');
 const User = require('../models/User');
 const Favourites = require('../models/Favourites');
@@ -106,7 +105,7 @@ exports.isFavourite = (req,res) => {
 
 exports.delete = (req,res) => {
     Favourites.findOneAndDelete({
-        user_id: req.body.id,
+        user_id: req.body.user_id,
         series_id: req.params.id
     })
     .exec()

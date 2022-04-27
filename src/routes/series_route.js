@@ -18,6 +18,4 @@ router.post('/:id/favourites', favourites_controller.addToFavourites);
 
 router.delete('/:id/favourites', favourites_controller.delete);
 
-router.delete('/:id/review/:review_id', review_controller.delete);
-
 module.exports = router;
