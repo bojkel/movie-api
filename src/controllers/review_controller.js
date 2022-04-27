@@ -17,7 +17,7 @@ exports.getAll = (req,res) => {
                 reviews: docs.map(review => {
                     return {
                         ID: review._id,
-                        User_ID: review._id,
+                        User_ID: review.user_id,
                         Serie_ID: review.serie_id,
                         Message: review.message,
                         Rating: review.rating
@@ -35,8 +35,7 @@ exports.getAll = (req,res) => {
 }
 
 exports.getReviewsForSeries = (req,res) => {
-
-    Review.find({serie_id: req.body.id})
+    Review.find({serie_id: req.params.id})
     .exec()
     .then(reviews=>{
         if(reviews.length === 0){
@@ -47,7 +46,7 @@ exports.getReviewsForSeries = (req,res) => {
                 Reviews: reviews.map(review=>{
                     return{
                         ID: review._id,
-                        User_ID: review._id,
+                        User_ID: review.user_id,
                         Serie_ID: review.serie_id,
                         Message: review.message,
                         Rating: review.rating
@@ -81,7 +80,7 @@ exports.createReview = (req, res) => {
             User_ID: doc.user_id,
             Serie_ID: doc.serie_id,
             Message: doc.message,
-            Rating: doc.rating
+            Rating: doc.ratingl
         }
         res.status(201).json(responseService.postMessage('review', result));
     })

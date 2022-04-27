@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const authService = require('../services/auth_service')
 const responseService = require('../services/response_service')
 const User = require('../models/User')
+const jwt = require('jsonwebtoken')
 
 exports.register = (req,res) => {
 
@@ -19,8 +20,11 @@ exports.register = (req,res) => {
             })
             return newUser
             .save()
-            .then(doc=>{
-                res.status(201).json(responseService.registerMessage(req.body.name, doc))
+            .then(user=>{
+                console.log('new user: ', user);
+                const token = authService.generateToken(user, 60);
+                console.log(`the user's token: `, token);
+                return res.status(201).json(responseService.registerMessage(req.body.name, user, token))
             }).catch(err=>{
                 if(err){
                     res.status(500).json(responseService.registerErrorMessage(err))
@@ -40,7 +44,7 @@ exports.login = (req,res) => {
         else{
             if(authService.comparePassword(req.body.password, user[0].password)){
 
-                const token = authService.generateToken(user, 50)
+                const token = authService.generateToken(user, 60)
 
                 return res.status(201).json(responseService.loginMessage(user[0].username,token))
             } 

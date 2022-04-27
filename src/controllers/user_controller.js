@@ -35,10 +35,9 @@ exports.getAll = (req,res) => {
 
 exports.getById = (req,res) => {
 
-    User.findById(req.params.userid)
+    User.findById(req.params.id)
     .exec()
     .then(user=>{
-
         if(user.length === 0){
             return res.status(404).json(responseService.noDataMessage('user'))
         }
@@ -51,9 +50,7 @@ exports.getById = (req,res) => {
                 Email: user.email,
                 Password: user.password
             }
-
             return res.status(200).json(responseService.getByProperty('user', 'id', fetchedUser))
-
         }
     }).catch(err=>{
         if(err){
@@ -103,46 +100,6 @@ exports.delete = (req,res) => {
     }).catch(err=>{
         if(err){
             return res.status(500).json(responseService.deleteErrorMessage('user', err))
-        }
-    })
-}
-
-exports.getFavourites = (req,res) => {
-    User.find({username: req.params.username})
-    .exec()
-    .then(user=>{
-        if(user.length < 1){
-            return res.status(404).json({
-                Message: responseService.doesntExistMessage('user')
-            })
-        }
-
-        else{
-            Favourites.find({user_id: user[0]._id})
-            .select('_id user_id movie_url')
-            .exec()
-            .then(favourites =>{
-                if(favourites.length === 0 ){
-                    res.status(500).json(responseService.noDataMessage('favourites'))
-                }
-                else{
-                    const result = {
-                        userFavourites: favourites.length,
-                        userFavourites: favourites.map(favourite => {
-                            return {
-                                ID: favourite._id,
-                                movie_url: favourite.movie_url,
-                                user_id: favourite.user_id
-                            }
-                        })
-                    }
-                    return res.status(200).json(responseService.getAllMessage('favourite', result));
-                }
-            })
-        }
-    }).catch(err=>{
-        if(err){
-            return res.status(404).json(responseService.getErrorMessage('favourite', true, err))
         }
     })
 }

@@ -3,9 +3,9 @@ const jwt = require('jsonwebtoken')
 
 exports.encrypt = (obj, saltRounds) =>{
 
-    const encryptedObject =  bcrypt.hashSync(obj, bcrypt.genSaltSync(saltRounds))
+    const encryptedObject =  bcrypt.hashSync(obj, bcrypt.genSaltSync(saltRounds));
 
-    return encryptedObject
+    return encryptedObject;
 
 }
 
@@ -21,22 +21,21 @@ exports.comparePassword = (providedPassword, password) => {
         }
     })
     
-    return comparedPassword
+    return comparedPassword;
 
 }
 
 exports.generateToken = (user, durationInMinutes) => {
 
     const token = jwt.sign({
-        UserID: user[0]._id,
-        Email: user[0].email,
-        Username: user[0].username,
-        Name: user[0].name
+        UserID: user._id,
+        Username: user.username,
+        Name: user.name
     },
     "SuperDuperSecretAndLongWebtokenKey",
     {
         expiresIn: durationInMinutes + "min"
     })
 
-    return token
+    return token;
 }

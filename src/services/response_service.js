@@ -57,10 +57,11 @@ exports.postErrorMessage = (obj, error) => {
     })
 }
 
-exports.registerMessage = (name, response) => {
+exports.registerMessage = (name, response, token) => {
     return({
         ServerMessage: 'Successfully registered. Hello, ' + name + '!',
-        Response: response
+        Response: response,
+        Token: token
     })
 }
 

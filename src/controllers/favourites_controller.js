@@ -20,7 +20,6 @@ exports.addToFavourites = (req, res) => {
                         user_id: user._id,
                         serie_id: req.params.id
                     })
-                
                     return favourite
                     .save()
                     .then(doc=>{
@@ -44,5 +43,45 @@ exports.addToFavourites = (req, res) => {
     })
     .catch(err=>{
         return res.status(404).json(responseService.doesntExistMessage('user', err))
+    })
+}
+
+exports.getFavourites = (req,res) => {
+    User.find({username: req.params.username})
+    .exec()
+    .then(user=>{
+        if(user.length < 1){
+            return res.status(404).json({
+                Message: responseService.doesntExistMessage('user')
+            })
+        }
+
+        else{
+            Favourites.find({user_id: user[0]._id})
+            .select('_id user_id series_id')
+            .exec()
+            .then(favourites =>{
+                if(favourites.length === 0 ){
+                    res.status(500).json(responseService.noDataMessage('favourites'))
+                }
+                else{
+                    const result = {
+                        userFavourites: favourites.length,
+                        userFavourites: favourites.map(favourite => {
+                            return {
+                                ID: favourite._id,
+                                series_id: favourite.series_id,
+                                user_id: favourite.user_id
+                            }
+                        })
+                    }
+                    return res.status(200).json(responseService.getAllMessage('favourite', result));
+                }
+            })
+        }
+    }).catch(err=>{
+        if(err){
+            return res.status(404).json(responseService.getErrorMessage('favourite', true, err))
+        }
     })
 }
