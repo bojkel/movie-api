@@ -12,7 +12,11 @@ router.get('/:id',series_controller.getById);
 
 router.post('/:id/review', review_controller.createReview);
 
+router.get('/:id/isFavourite/:user_id', favourites_controller.isFavourite);
+
 router.post('/:id/favourites', favourites_controller.addToFavourites);
+
+router.delete('/:id/favourites', favourites_controller.delete);
 
 router.delete('/:id/review/:review_id', review_controller.delete);
 

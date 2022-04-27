@@ -72,9 +72,12 @@ exports.registerErrorMessage = ( error ) => {
     })
 }
 
-exports.loginMessage = (username, token) => {
+exports.loginMessage = (user, token) => {
     return({
-        ServerMessage: 'Logged in! The movie-api greets you again, ' + username + '!',
+        ServerMessage: 'Logged in! The movie-api greets you again, ' + user.username + '!',
+        User_ID: user._id,
+        Username: user.username,
+        Name: user.name,
         Token: token
     })
 }

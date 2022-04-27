@@ -19,8 +19,7 @@ exports.getAll = (req,res) => {
                     return {
                         ID: user._id,
                         Username: user.username,
-                        Name: user.name,
-                        Password: user.password
+                        Name: user.name
                     }
                 })
             }
@@ -46,9 +45,7 @@ exports.getById = (req,res) => {
             const fetchedUser = {
                 ID: user._id,
                 Username: user.username,
-                Name: user.name,
-                Email: user.email,
-                Password: user.password
+                Name: user.name
             }
             return res.status(200).json(responseService.getByProperty('user', 'id', fetchedUser))
         }
@@ -72,8 +69,7 @@ exports.getByUsername = (req,res) => {
         const fetchedUser = {
             ID: user._id,
             Username: user.username,
-            Name: user.name,
-            Password: user.password
+            Name: user.name
         }
 
         return res.status(200).json(responseService.getByProperty('user', 'username', fetchedUser))

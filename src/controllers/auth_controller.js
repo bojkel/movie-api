@@ -46,7 +46,7 @@ exports.login = (req,res) => {
 
                 const token = authService.generateToken(user, 60)
 
-                return res.status(201).json(responseService.loginMessage(user[0].username,token))
+                return res.status(201).json(responseService.loginMessage(user[0],token))
             } 
             else{
                 return res.status(401).json(responseService.loginErrorMessage())

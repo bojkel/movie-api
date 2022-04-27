@@ -1,7 +1,6 @@
 const Review = require('../models/Review');
 const responseService = require('../services/response_service');
-const { default: mongoose } = require('mongoose');
-
+const mongoose = require('mongoose');
 
 exports.getAll = (req,res) => {
     Review.find()
@@ -24,12 +23,12 @@ exports.getAll = (req,res) => {
                     }
                 })
             }
-            res.status(200).json(responseService.getAllMessage('review', result))
+            return res.status(200).json(responseService.getAllMessage('review', result))
         }
         
     }).catch(err=>{
         if(err){
-            res.status(404).json(responseService.getErrorMessage('review', true, err))
+            return res.status(404).json(responseService.getErrorMessage('review', true, err))
         }
     })
 }
@@ -80,13 +79,13 @@ exports.createReview = (req, res) => {
             User_ID: doc.user_id,
             Serie_ID: doc.serie_id,
             Message: doc.message,
-            Rating: doc.ratingl
+            Rating: doc.rating
         }
-        res.status(201).json(responseService.postMessage('review', result));
+        return res.status(201).json(responseService.postMessage('review', result));
     })
     .catch(err=>{
         if(err){
-            res.status(500).json(responseService.postErrorMessage('review', err));
+            return res.status(500).json(responseService.postErrorMessage('review', err));
         }
     })
 }

@@ -11,14 +11,17 @@ exports.addToFavourites = (req, res) => {
             return res.status(404).json(responseService.noDataMessage('user'))
         }
         else{
-            Favourites.find({serie_id: req.params.id, user_id: req.body.user_id})
+            Favourites.find({ 
+                user_id: req.body.user_id,
+                series_id: req.params.id
+            })
             .exec()
             .then(doc=>{
                 if(doc.length === 0){
                     var favourite = new Favourites({
                         _id: new mongoose.Types.ObjectId,
                         user_id: user._id,
-                        serie_id: req.params.id
+                        series_id: req.params.id
                     })
                     return favourite
                     .save()
@@ -26,7 +29,7 @@ exports.addToFavourites = (req, res) => {
                         const result = {
                             ID: doc._id,
                             User_ID: doc.user_id,
-                            Serie_ID: doc.serie_id
+                            Series_ID: doc.series_id
                         }
                         res.status(201).json(responseService.postMessage('favourite', result));
                     })
@@ -83,5 +86,33 @@ exports.getFavourites = (req,res) => {
         if(err){
             return res.status(404).json(responseService.getErrorMessage('favourite', true, err))
         }
+    })
+}
+
+exports.isFavourite = (req,res) => {
+    Favourites.find({
+        user_id: req.params.user_id,
+        series_id: req.params.id
+    })
+    .then(response=>{
+        if(response.length === 0 ){
+            return res.status(200).json({isFavourite: "no"})
+        }
+        else{
+            return res.status(200).json({isFavourite: "yes"})
+        }
+    })
+}
+
+exports.delete = (req,res) => {
+    Favourites.findOneAndDelete({
+        user_id: req.body.id,
+        series_id: req.params.id
+    })
+    .exec()
+    .then(response => {
+        return res.status(200).json({Message: 'Removed from favourites'})
+    }).catch(err=>{
+        return res.status(404).json({Message: 'Couldnt remove from favourites:', err})
     })
 }
