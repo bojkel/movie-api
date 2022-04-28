@@ -95,10 +95,10 @@ exports.isFavourite = (req,res) => {
     })
     .then(response=>{
         if(response.length === 0 ){
-            return res.status(200).json({isFavourite: "no"})
+            return res.status(404).json(false)
         }
         else{
-            return res.status(200).json({isFavourite: "yes"})
+            return res.status(200).json(true)
         }
     })
 }
@@ -110,6 +110,7 @@ exports.delete = (req,res) => {
     })
     .exec()
     .then(response => {
+        console.log(response)
         return res.status(200).json({Message: 'Removed from favourites'})
     }).catch(err=>{
         return res.status(404).json({Message: 'Couldnt remove from favourites:', err})
