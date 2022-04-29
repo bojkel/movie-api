@@ -105,12 +105,10 @@ exports.isFavourite = (req,res) => {
 
 exports.delete = (req,res) => {
     Favourites.findOneAndDelete({
-        user_id: req.body.user_id,
+        user_id: req.params.user_id,
         series_id: req.params.id
     })
-    .exec()
     .then(response => {
-        console.log(response)
         return res.status(200).json({Message: 'Removed from favourites'})
     }).catch(err=>{
         return res.status(404).json({Message: 'Couldnt remove from favourites:', err})

@@ -16,6 +16,6 @@ router.get('/:id/isFavourite/:user_id', favourites_controller.isFavourite);
 
 router.post('/:id/favourites', favourites_controller.addToFavourites);
 
-router.delete('/:id/favourites', favourites_controller.delete);
+router.delete('/:id/favourites/:user_id', favourites_controller.delete);
 
 module.exports = router;
