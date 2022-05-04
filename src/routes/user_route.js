@@ -3,14 +3,14 @@ const router = express.Router()
 const userController = require('../controllers/user_controller');
 const favouritesController = require('../controllers/favourites_controller');
 
-router.get('/', userController.getAll)
+router.get('/', userController.getUsers)
 
-router.get('/:id', userController.getById);
+router.get('/:id', userController.getUserById);
 
-router.get('/username/:username', userController.getByUsername)
+router.get('/username/:username', userController.getUserByUsername)
 
-router.get('/:username/favourites', favouritesController.getFavourites)
+router.get('/:username/favourites', favouritesController.getFavouritesForUser)
 
-router.delete('/:username', userController.delete)
+router.delete('/:username', userController.deleteUser)
 
 module.exports = router

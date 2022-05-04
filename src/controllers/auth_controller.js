@@ -2,7 +2,6 @@ const mongoose = require('mongoose')
 const authService = require('../services/auth_service')
 const responseService = require('../services/response_service')
 const User = require('../models/User')
-const jwt = require('jsonwebtoken')
 
 exports.register = (req,res) => {
 

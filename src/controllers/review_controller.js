@@ -2,7 +2,7 @@ const Review = require('../models/Review');
 const responseService = require('../services/response_service');
 const mongoose = require('mongoose');
 
-exports.getAll = (req,res) => {
+exports.getReviews = (req,res) => {
     Review.find()
     .select('_id user_id series_id message rating')
     .exec()
@@ -90,7 +90,7 @@ exports.createReview = (req, res) => {
     })
 }
 
-exports.delete = (req,res) => {
+exports.deleteReview = (req,res) => {
     Review.findByIdAndDelete({_id: req.params.id})
     .exec()
     .then(deletedReview=>{

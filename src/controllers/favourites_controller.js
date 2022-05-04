@@ -48,7 +48,7 @@ exports.addToFavourites = (req, res) => {
     })
 }
 
-exports.getFavourites = (req,res) => {
+exports.getFavouritesForUser = (req,res) => {
     User.find({username: req.params.username})
     .exec()
     .then(user=>{
@@ -103,7 +103,7 @@ exports.isFavourite = (req,res) => {
     })
 }
 
-exports.delete = (req,res) => {
+exports.removeFromFavourites = (req,res) => {
     Favourites.findOneAndDelete({
         user_id: req.params.user_id,
         series_id: req.params.id

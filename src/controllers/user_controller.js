@@ -4,7 +4,7 @@ const responseService = require('../services/response_service');
 const { default: mongoose } = require('mongoose');
 
 
-exports.getAll = (req,res) => {
+exports.getUsers = (req,res) => {
     User.find()
     .select('_id username password name fav_movies fav_series')
     .exec()
@@ -32,7 +32,7 @@ exports.getAll = (req,res) => {
     })
 }
 
-exports.getById = (req,res) => {
+exports.getUserById = (req,res) => {
 
     User.findById(req.params.id)
     .exec()
@@ -54,12 +54,11 @@ exports.getById = (req,res) => {
             return res.status(404).json(responseService.getErrorMessage('user', false, err))
         }
     })
-
 }
 
-exports.getByUsername = (req,res) => {
+exports.getUserByUsername = (req,res) => {
 
-    User.find({username: req.params.id})
+    User.find({username: req.params.username})
     .exec()
     .then(user=>{
         if(user.length < 1){
@@ -67,9 +66,9 @@ exports.getByUsername = (req,res) => {
         }
 
         const fetchedUser = {
-            ID: user._id,
-            Username: user.username,
-            Name: user.name
+            ID: user[0]._id,
+            Username: user[0].username,
+            Name: user[0].name
         }
 
         return res.status(200).json(responseService.getByProperty('user', 'username', fetchedUser))
@@ -81,7 +80,7 @@ exports.getByUsername = (req,res) => {
     })
 }
 
-exports.delete = (req,res) => {
+exports.deleteUser = (req,res) => {
     User.findOneAndDelete({username: req.params.username})
     .exec()
     .then(deletedUser=>{

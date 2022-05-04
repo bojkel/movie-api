@@ -13,7 +13,7 @@ exports.startServer = (app, port) => {
     app.listen(port, (err)=>{
         console.log("Listening on port ", port, "...");
         if(err){
-            console.log('Connecting error: ', err)
+            console.log('Connection error: ', err)
         }
         else{
             console.log('Server started on port ',port)

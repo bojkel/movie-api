@@ -24,7 +24,7 @@ exports.getSeries = (req,res) => {
     })
 }
 
-exports.getById = (req,res) => {
+exports.getSeriesById = (req,res) => {
 
     axios.get(series_url+"/"+req.params.id)
     .then(response=>{
