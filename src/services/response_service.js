@@ -106,6 +106,30 @@ exports.noDataMessage = (obj) => {
     })
 }
 
+exports.updateMessage = (obj) => {
+    return({
+        ServerMessage: 'Updated the ' + obj
+    })
+}
+
+exports.notUpdatedMessage = (obj) => {
+    return({
+        ServerMessage: 'Could not update the ' + obj
+    })
+}
+
+exports.updateProfilePictureMessage = (username) => {
+    return({
+        ServerMessage: 'Updated the profile picture for ' + username + '. Lookin good!'
+    })
+}
+
+exports.updatePasswordMessage = (username) => {
+    return({
+        ServerMessage: 'Updated the password for ' + username
+    })
+}
+
 exports.greetingsMessage = () => {
     return{
         MovieAPi: "Greetings, to the movie api! Happy hacking!"

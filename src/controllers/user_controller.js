@@ -1,7 +1,6 @@
 const User = require('../models/User');
 const Favourites = require('../models/Favourites');
 const responseService = require('../services/response_service');
-const { default: mongoose } = require('mongoose');
 
 
 exports.getUsers = (req,res) => {
@@ -19,7 +18,8 @@ exports.getUsers = (req,res) => {
                     return {
                         ID: user._id,
                         Username: user.username,
-                        Name: user.name
+                        Name: user.name,
+                        Profile_Picture: user.profile_picture_url
                     }
                 })
             }
@@ -45,7 +45,8 @@ exports.getUserById = (req,res) => {
             const fetchedUser = {
                 ID: user._id,
                 Username: user.username,
-                Name: user.name
+                Name: user.name,
+                Profile_Picture: user.profile_picture
             }
             return res.status(200).json(responseService.getByProperty('user', 'id', fetchedUser))
         }
@@ -68,7 +69,8 @@ exports.getUserByUsername = (req,res) => {
         const fetchedUser = {
             ID: user[0]._id,
             Username: user[0].username,
-            Name: user[0].name
+            Name: user[0].name,
+            Profile_Picture: user[0].profile_picture_url
         }
 
         return res.status(200).json(responseService.getByProperty('user', 'username', fetchedUser))
@@ -76,6 +78,45 @@ exports.getUserByUsername = (req,res) => {
     }).catch(err=>{
         if(err){
             return res.status(404).json(responseService.getErrorMessage('user', false, err))
+        }
+    })
+}
+
+exports.updateUser = (req,res) => {
+    User.updateOne({username: req.params.username})
+    .exec()
+    .then(updatedUser=>{
+        if(updatedUser.length === 0){
+            return res.status(404).json(responseService.doesntExistMessage('user'))
+        }
+        else{
+            return res.status(200).json(responseService.updateMessage('user'))
+        }
+    })
+}
+
+exports.updatePassword = (req,res) => {
+    User.updateOne({username: req.params.usename})
+    .exec()
+    .then(updatedUser => {
+        if(updatedUser.length === 0){
+            return res.status(404).json(responseService.doesntExistMessage('user'))
+        }
+        else{
+            return res.status(200).json(responseService.updatePasswordMessage(req.params.username))
+        }
+    })
+}
+
+exports.uploadProfilePicture = (req,res) => {
+    User.updateOne({username: req.params.username})
+    .exec()
+    .then(updatedUser=> {
+        if(updatedUser.length === 0){
+            return res.status(404).json(responseService.doesntExistMessage('user'))
+        }
+        else{
+            return res.status(200).json(responseService.updateProfilePictureMessage(req.params.username))
         }
     })
 }

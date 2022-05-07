@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@google-cloud/storage": "^5.19.4",
     "axios": "^0.26.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.0",
@@ -19,6 +20,7 @@
     "jsonwebtoken": "^8.5.1",
     "jws": "^4.0.0",
     "mongoose": "^6.3.1",
+    "multer": "^1.4.4",
     "serverless": "^3.15.1",
     "serverless-http": "^3.0.1"
   },
