@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const responseService = require('./response_service')
 
 exports.encrypt = (obj, saltRounds) =>{
 
@@ -32,11 +33,10 @@ exports.generateToken = (user, durationInMinutes) => {
         Username: user.username,
         Name: user.name
     },
-    "SuperDuperSecretAndLongWebtokenKey",
+    "SuperDuperSecretAndLongWebTokenKey",
     {
         expiresIn: durationInMinutes + "min"
     })
-
     return token;
 }
 
@@ -47,9 +47,7 @@ exports.checkAuthentication = (req, res, next) => {
         req.userData =  decoded;
         next();
     }
-    catch (error){
-        return res.status(401).json({
-            message: 'Auth failed'
-        });
+    catch(authError){
+        return res.status(401).json(responseService.notAuthorizedMessage(authError))
     }
 }

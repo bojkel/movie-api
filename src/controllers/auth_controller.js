@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const authService = require('../services/auth_service')
 const responseService = require('../services/response_service')
 const User = require('../models/User')
+const file_service = require('../services/file_service');
 
 exports.register = (req,res) => {
 
@@ -16,6 +17,7 @@ exports.register = (req,res) => {
                 username: req.body.username,
                 name: req.body.name,
                 password: authService.encrypt(req.body.password, 10),
+                profile_picture_url: req.body.profile_picture_url
             })
             return newUser
             .save()

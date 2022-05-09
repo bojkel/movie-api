@@ -1,11 +1,12 @@
 const User = require('../models/User');
 const Favourites = require('../models/Favourites');
 const responseService = require('../services/response_service');
+const googleCloudStorage = require('@google-cloud/storage');
 
 
 exports.getUsers = (req,res) => {
     User.find()
-    .select('_id username password name fav_movies fav_series')
+    .select('_id username password name profile_picture_url')
     .exec()
     .then(docs => {
         if(docs.length === 0 ) {

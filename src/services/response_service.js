@@ -130,6 +130,12 @@ exports.updatePasswordMessage = (username) => {
     })
 }
 
+exports.notAuthorizedMessage = (authError) => {
+    return({
+        ServerMessage: 'You are not authorized. Login first. Error: ', authError
+    })
+}
+
 exports.greetingsMessage = () => {
     return{
         MovieAPi: "Greetings, to the movie api! Happy hacking!"

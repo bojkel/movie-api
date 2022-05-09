@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 
 exports.getReviews = (req,res) => {
     Review.find()
-    .select('_id user_id series_id message rating')
+    .select('_id user_id serie_id message rating')
     .exec()
     .then(docs => {
         if(docs.length === 0 ) {

@@ -4,11 +4,11 @@ const series_controller = require('../controllers/series_controller');
 const review_controller = require('../controllers/review_controller');
 const favourites_controller = require('../controllers/favourites_controller');
 
-router.get('/',series_controller.getSeries);
+router.get('/', series_controller.getSeries);
 
 router.get('/:id/reviews', review_controller.getReviewsForSeries)
 
-router.get('/:id',series_controller.getSeriesById);
+router.get('/:id', series_controller.getSeriesById);
 
 router.post('/:id/review', review_controller.createReview);
 
