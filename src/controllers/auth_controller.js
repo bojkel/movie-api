@@ -2,35 +2,45 @@ const mongoose = require('mongoose')
 const authService = require('../services/auth_service')
 const responseService = require('../services/response_service')
 const User = require('../models/User')
-const file_service = require('../services/file_service');
+const validationService = require('../services/validation_service')
+
 
 exports.register = (req,res) => {
 
-    User.find({username: req.body.username})
+    User.find({$or: [{username: req.body.username}, {email: req.body.email}]})
     .then(user=>{
         if(user.length>=1){ 
-            res.status(409).json(responseService.alreadyExistsMessage('user'))
+           return res.status(409).json(responseService.alreadyExistsMessage('user'))
         }
         else{
-            var newUser = new User({
-                _id: new mongoose.Types.ObjectId,
-                username: req.body.username,
-                name: req.body.name,
-                password: authService.encrypt(req.body.password, 10),
-                profile_picture_url: req.body.profile_picture_url
-            })
-            return newUser
-            .save()
-            .then(user=>{
-                console.log('new user: ', user);
-                const token = authService.generateToken(user, 60);
-                console.log(`the user's token: `, token);
-                return res.status(201).json(responseService.registerMessage(req.body.name, user, token))
-            }).catch(err=>{
-                if(err){
-                    res.status(500).json(responseService.registerErrorMessage(err))
+            if(validationService.isPasswordLongEnough(req.body.password, 8)){
+                if(validationService.isEmailValid(req.body.email)){
+                    var newUser = new User({
+                        _id: new mongoose.Types.ObjectId,
+                        username: req.body.username,
+                        name: req.body.name,
+                        email: req.body.email,
+                        password: authService.encrypt(req.body.password, 10),
+                        profile_picture_url: req.body.profile_picture_url
+                    })
+                    return newUser
+                    .save()
+                    .then(user=>{
+                        const token = authService.generateToken(user, 60);
+                        return res.status(201).json(responseService.registerMessage(req.body.name, user, token))
+                    }).catch(err=>{
+                        if(err){
+                           return res.status(500).json(responseService.registerErrorMessage(err))
+                        }
+                    })
                 }
-            })
+                else{
+                    return res.status(404).json(responseService.notValidEmailMessage(req.body.email))
+                }
+            }
+            else{
+                return res.status(404).json(responseService.notLongEnoughPasswordMessage(8))
+            }
         }
     })
 }

@@ -141,3 +141,15 @@ exports.greetingsMessage = () => {
         MovieAPi: "Greetings, to the movie api! Happy hacking!"
     }
 }
+
+exports.notLongEnoughPasswordMessage = (characters) => {
+    return {
+        ServerMessage: `Password is not long enough. It should be at least ${characters} characters long`
+    }
+}
+
+exports.notValidEmailMessage = (email) => {
+    return {
+        ServerMessage: `${email} is not a valid email. Use a real one.`
+    }
+}
