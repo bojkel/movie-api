@@ -4,7 +4,6 @@ const responseService = require('../services/response_service')
 const User = require('../models/User')
 const validationService = require('../services/validation_service')
 
-
 exports.register = (req,res) => {
 
     User.find({$or: [{username: req.body.username}, {email: req.body.email}]})

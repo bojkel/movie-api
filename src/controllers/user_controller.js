@@ -6,7 +6,7 @@ const googleCloudStorage = require('@google-cloud/storage');
 
 exports.getUsers = (req,res) => {
     User.find()
-    .select('_id username password name profile_picture_url')
+    .select('_id username password name email profile_picture_url')
     .exec()
     .then(docs => {
         if(docs.length === 0 ) {
@@ -20,6 +20,7 @@ exports.getUsers = (req,res) => {
                         ID: user._id,
                         Username: user.username,
                         Name: user.name,
+                        Email: user.email,
                         Profile_Picture: user.profile_picture_url
                     }
                 })
@@ -47,6 +48,7 @@ exports.getUserById = (req,res) => {
                 ID: user._id,
                 Username: user.username,
                 Name: user.name,
+                Email: user.email,
                 Profile_Picture: user.profile_picture
             }
             return res.status(200).json(responseService.getByProperty('user', 'id', fetchedUser))
@@ -71,6 +73,7 @@ exports.getUserByUsername = (req,res) => {
             ID: user[0]._id,
             Username: user[0].username,
             Name: user[0].name,
+            Email: user[0].email,
             Profile_Picture: user[0].profile_picture_url
         }
 
