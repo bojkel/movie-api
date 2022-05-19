@@ -15,10 +15,7 @@ exports.getSeries = (req,res) => {
                 }
             })
         }
-        return res.status(200).json({
-            message:'series fetched',
-            series: result
-        })
+        return res.status(200).json(responseService.getAllMessage('series', result))
     }).catch(err=>{
         console.log('error: ', err)
     })

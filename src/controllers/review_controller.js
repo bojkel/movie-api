@@ -63,15 +63,15 @@ exports.getReviewsForSeries = (req,res) => {
 
 exports.createReview = (req, res) => {
 
-    var review = new Review({
+    var review = {
         _id: new mongoose.Types.ObjectId,
         user_id: req.body.user_id,
         serie_id: req.params.id,
         message: req.body.message,
         rating: req.body.rating
-    })
+    }
 
-    return review
+    return new Review(review)
     .save()
     .then(doc=>{
         const result = {

@@ -17,12 +17,12 @@ exports.addToFavourites = (req, res) => {
             .exec()
             .then(doc=>{
                 if(doc.length === 0){
-                    var favourite = new Favourites({
+                    var favourite = {
                         _id: new mongoose.Types.ObjectId,
                         user_id: user._id,
                         series_id: req.params.id
-                    })
-                    return favourite
+                    }
+                    return new Favourites(favourite)
                     .save()
                     .then(doc=>{
                         const result = {
@@ -30,15 +30,13 @@ exports.addToFavourites = (req, res) => {
                             User_ID: doc.user_id,
                             Series_ID: doc.series_id
                         }
-                        res.status(201).json(responseService.postMessage('favourite', result));
+                       return res.status(201).json(responseService.addedToFavouritesMessage(result));
                     })
                     .catch(err=>{
-                        if(err){
-                            return res.status(500).json(responseService.postErrorMessage('favourite', err));
-                        }
+                        return res.status(500).json(responseService.postErrorMessage('favourite', err));
                     })
                 }else{
-                    return res.status(404).json({Message: 'You already have that series in your favourites'});
+                    return res.status(404).json(responseService.alreadyIsInFavouritesMessage());
                 }
             })
         }
@@ -64,7 +62,7 @@ exports.getFavouritesForUser = (req,res) => {
             .exec()
             .then(favourites =>{
                 if(favourites.length === 0 ){
-                    res.status(500).json(responseService.noDataMessage('favourites'))
+                    return res.status(500).json(responseService.noDataMessage('favourites'))
                 }
                 else{
                     const result = {
@@ -109,7 +107,7 @@ exports.removeFromFavourites = (req,res) => {
         series_id: req.params.id
     })
     .then(response => {
-        return res.status(200).json({Message: 'Removed from favourites'})
+        return res.status(200).json(responseService.removedFromFavouritesMesasage())
     }).catch(err=>{
         return res.status(404).json({Message: 'Couldnt remove from favourites:', err})
     })

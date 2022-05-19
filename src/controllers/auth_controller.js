@@ -14,15 +14,15 @@ exports.register = (req,res) => {
         else{
             if(validationService.isPasswordLongEnough(req.body.password, 8)){
                 if(validationService.isEmailValid(req.body.email)){
-                    var newUser = new User({
+                    var newUser = {
                         _id: new mongoose.Types.ObjectId,
                         username: req.body.username,
                         name: req.body.name,
                         email: req.body.email,
                         password: authService.encrypt(req.body.password, 10),
                         profile_picture_url: req.body.profile_picture_url
-                    })
-                    return newUser
+                    }
+                    return new User(newUser)
                     .save()
                     .then(user=>{
                         const token = authService.generateToken(user, 60);

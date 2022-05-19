@@ -153,3 +153,22 @@ exports.notValidEmailMessage = (email) => {
         ServerMessage: `${email} is not a valid email. Use a real one.`
     }
 }
+
+exports.addedToFavouritesMessage = (response) => {
+    return {
+        ServerMessage: `Series added to your favourites!`,
+        Response: response
+    }
+}
+
+exports.removedFromFavouritesMesasage = () => {
+    return {
+        ServerMessage: `Series removed from your favourites!`,
+    }
+}
+
+exports.alreadyIsInFavouritesMessage = () => {
+    return {
+        ServerMessage: `You already have that series in your favourites`
+    }
+}
