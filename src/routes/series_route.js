@@ -10,7 +10,7 @@ router.get('/:id/reviews', review_controller.getReviewsForSeries)
 
 router.get('/:id', series_controller.getSeriesById);
 
-router.post('/:id/review', review_controller.createReview);
+router.post('/:id/submit_review', review_controller.createReview);
 
 router.get('/:id/isFavourite/:user_id', favourites_controller.isFavourite);
 

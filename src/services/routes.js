@@ -11,7 +11,7 @@ exports.setRoutes = (app) => {
     app.use('/', home_route);
     app.use('/register', register_route);
     app.use('/login', login_route);
-    app.use('/user', user_route);
-    app.use('/review', review_route);
+    app.use('/users', user_route);
+    app.use('/reviews', review_route);
     app.use('/series', series_route);
 }

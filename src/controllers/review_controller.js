@@ -1,10 +1,12 @@
 const Review = require('../models/Review');
+const User = require('../models/User')
 const responseService = require('../services/response_service');
+const dateService = require('../services/date_service')
 const mongoose = require('mongoose');
 
 exports.getReviews = (req,res) => {
     Review.find()
-    .select('_id user_id serie_id message rating')
+    .select('_id user_id serie_id message rating date_created')
     .exec()
     .then(docs => {
         if(docs.length === 0 ) {
@@ -19,7 +21,8 @@ exports.getReviews = (req,res) => {
                         User_ID: review.user_id,
                         Serie_ID: review.serie_id,
                         Message: review.message,
-                        Rating: review.rating
+                        Rating: review.rating,
+                        Created_Date: review.date_created
                     }
                 })
             }
@@ -48,7 +51,8 @@ exports.getReviewsForSeries = (req,res) => {
                         User_ID: review.user_id,
                         Serie_ID: review.serie_id,
                         Message: review.message,
-                        Rating: review.rating
+                        Rating: review.rating,
+                        Created_Date: review.date_created
                     }
                 })
             }
@@ -63,29 +67,44 @@ exports.getReviewsForSeries = (req,res) => {
 
 exports.createReview = (req, res) => {
 
-    var review = {
-        _id: new mongoose.Types.ObjectId,
-        user_id: req.body.user_id,
-        serie_id: req.params.id,
-        message: req.body.message,
-        rating: req.body.rating
-    }
-
-    return new Review(review)
-    .save()
-    .then(doc=>{
-        const result = {
-            ID: doc._id,
-            User_ID: doc.user_id,
-            Serie_ID: doc.serie_id,
-            Message: doc.message,
-            Rating: doc.rating
+    User.findById(req.body.user_id)
+    .exec()
+    .then(user=>{
+        if(user.length < 1){
+            return res.status(404).json(responseService.doesntExistMessage('user'))
         }
-        return res.status(201).json(responseService.postMessage('review', result));
-    })
-    .catch(err=>{
+        else{
+            var review = {
+                _id: new mongoose.Types.ObjectId,
+                user_id: req.body.user_id,
+                serie_id: req.params.id,
+                message: req.body.message,
+                rating: req.body.rating,
+                date_created: dateService.createDateTimeNow()
+            }
+        
+            return new Review(review)
+            .save()
+            .then(doc=>{
+                const result = {
+                    ID: doc._id,
+                    User_ID: doc.user_id,
+                    Serie_ID: doc.serie_id,
+                    Message: doc.message,
+                    Rating: doc.rating,
+                    Created_Date: doc.date_created
+                }
+                return res.status(201).json(responseService.postMessage('review', result));
+            })
+            .catch(err=>{
+                if(err){
+                    return res.status(500).json(responseService.postErrorMessage('review', err));
+                }
+            })   
+        }
+    }).catch(err=>{
         if(err){
-            return res.status(500).json(responseService.postErrorMessage('review', err));
+            return res.status(500).json(responseService.getErrorMessage('user', false, err))
         }
     })
 }
